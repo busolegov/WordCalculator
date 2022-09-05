@@ -1,56 +1,47 @@
-﻿using System.Collections.Concurrent;
-using System.Linq;
-using Xunit;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Text;
+using AutoFixture;
 
 namespace DigitalDesign.Tests
 {
-    
+    [TestClass()]
     public class WordCalculatorTests
     {
-        [Fact]
-
-        public static void GetWordsTest()
+        [TestMethod()]
+        [DataRow(1)]
+        [DataRow(10)]
+        [DataRow(1000)]
+        public void GIVEN_generated_text_WHEN_CalculateWordsFullText_method_is_invoked_THEN_correct_wordmap_is_returned(int cycle)
         {
-            //Arrange
+            //arrange
+            var fixture = new Fixture();
+            StringBuilder sb = new StringBuilder();
+            Dictionary<string, int> actualMap = new Dictionary<string, int>();
+            Random random = new Random();
+            string[] wordSpaces = new string[4] {" ", "!", "  ", "??" };
 
-            string text = "Костер открыто и резко направил острие своей книги против чёрных Сов реакции, против Силы и Коварства, царствующих не только в эпоху Филиппа Второго";
-            int taskCount = Environment.ProcessorCount;
-            WordCalculator calculator = new WordCalculator(taskCount, text);
-
-            Dictionary<string, int> dict = new Dictionary<string, int>
+            for (int i = 0; i <= cycle; i++)
             {
-                { "костер", 1 },
-                { "открыто", 1 },
-                { "и", 2 },
-                { "резко", 1 },
-                { "направил", 1 },
-                { "острие", 1 },
-                { "своей", 1 },
-                { "книги", 1 },
-                { "против", 2 },
-                { "чёрных", 1 },
-                { "cов", 1 },
-                { "реакции", 1 },
-                { "cилы", 1 },
-                { "коварства", 1 },
-                { "царствующих", 1 },
-                { "не", 1 },
-                { "только", 1 },
-                { "в", 1 },
-                { "эпоху", 1 },
-                { "филиппа", 1 },
-                { "второго", 1 }
-            };
+                int randomWordCount = random.Next(1, 10);
+                string word = fixture.Create<string>();
+                for (int m = 1; m <= randomWordCount; m++)
+                {
+                    sb.Append(word);
+                    sb.Append(wordSpaces[random.Next(0, 3)]);
+                }
+                actualMap.TryAdd(word, randomWordCount);
+            }
 
-            //Act
+            var orderedActualMap = actualMap.OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.Value);
+            int cpuCount = Environment.ProcessorCount;
+            WordCalculator calc = new WordCalculator(cpuCount, sb.ToString());
 
-            calculator.GetWords();
-            var sut = calculator.Map.AsEnumerable();
+            //act
+            calc.CalculateWordsFullText();
+            var sut = calc.map.OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.Value);
 
-
-
-            //Assert
-            Assert.True(dict.Any());
+            //assert
+            Assert.IsTrue(Enumerable.SequenceEqual(sut, orderedActualMap));
         }
     }
 }

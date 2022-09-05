@@ -1,6 +1,4 @@
 ﻿using DigitalDesign;
-using static System.Net.Mime.MediaTypeNames;
-using System.Threading.Tasks;
 using System.Data;
 using System.Text;
 
@@ -8,47 +6,46 @@ class Program
 {
     public static void Main(string[] args) 
     {
-        //Console.WriteLine("Введите путь к файлу.");
-        string path = "C:\\Users\\6yc\\Desktop\\test-text2.txt";
+        Console.WriteLine("Введите путь к файлу.");
 
-        string? text = null;
+        string text = null;
 
         try
         {
-            //text = File.ReadAllText(Console.ReadLine());
-            text = File.ReadAllText(path);
+            text = File.ReadAllText(Console.ReadLine());
         }
         catch (Exception)
         {
-
-            Console.WriteLine("Ошибка чтения файла.");
+            Console.WriteLine("Ошибка чтения файла. Нажмите Enter.");
             Console.ReadLine();
             Environment.Exit(0);
         }
 
-        Console.WriteLine(text.Length);
+        int cpuCount = Environment.ProcessorCount;
 
-        int procCount = Environment.ProcessorCount;
+        WordCalculator calculator = new WordCalculator(cpuCount, text);
+        calculator.CalculateWordsFullText();
 
+        var result = calculator.map.OrderByDescending(pair => pair.Value).ToDictionary(pair => pair.Key, pair => pair.Value);
 
-
-        WordCalculator calculator = new WordCalculator(procCount, text);
-        calculator.GetWords();
-
-        var result = calculator.Map.OrderByDescending(pair => pair.Value).ToDictionary(pair => pair.Key, pair => pair.Value);
-
-        foreach (var item in result)
+        try
         {
-            Console.WriteLine($"{item.Value} - {item.Key}");
-        }
-
-        using (StreamWriter sw = new StreamWriter("result.txt", false, Encoding.UTF8))
-        {
-            foreach (var item in result)
+            using (StreamWriter sw = new StreamWriter("result.txt", false, Encoding.UTF8))
             {
-                sw.WriteLine($"{item.Key} - {item.Value}");
+                foreach (var item in result)
+                {
+                    sw.WriteLine($"{item.Key} \t {item.Value}");
+                }
             }
         }
+        catch (Exception)
+        {
+            Console.WriteLine("Ошибка записи файла. Нажмите Enter.");
+            Console.ReadLine();
+            Environment.Exit(0);
+        }
+        
+        Console.WriteLine("Результат подсчета слов записан в файл result.txt");
 
         Console.ReadLine();
     }

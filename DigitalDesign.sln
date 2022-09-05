@@ -5,6 +5,8 @@ VisualStudioVersion = 17.3.32804.467
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DigitalDesign", "DigitalDesign\DigitalDesign.csproj", "{55A86EF5-6328-4C4C-BE02-0D8A5DB7E4CE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DigitalDesignTests", "DigitalDesignTests\DigitalDesignTests.csproj", "{AAEF585B-263B-4505-A185-62E187C77CA9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{55A86EF5-6328-4C4C-BE02-0D8A5DB7E4CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{55A86EF5-6328-4C4C-BE02-0D8A5DB7E4CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{55A86EF5-6328-4C4C-BE02-0D8A5DB7E4CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AAEF585B-263B-4505-A185-62E187C77CA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAEF585B-263B-4505-A185-62E187C77CA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAEF585B-263B-4505-A185-62E187C77CA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAEF585B-263B-4505-A185-62E187C77CA9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

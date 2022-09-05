@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.Text;
 
 
@@ -11,13 +9,14 @@ namespace DigitalDesign
         public int TaskCount { get; set; }
         public string Text { get; set; }
 
-        public ConcurrentDictionary<string, int> Map = new ConcurrentDictionary<string, int>();
+        public ConcurrentDictionary<string, int> map = new ConcurrentDictionary<string, int>();
 
-        public WordCalculator(int cpuCores, string text)
+        public WordCalculator(int cpuCount, string text)
         {
-            TaskCount = cpuCores;
+            TaskCount = cpuCount;
             Text = text;
         }
+
 
         private int[] GetTextPointers()
         {
@@ -30,25 +29,21 @@ namespace DigitalDesign
             {
                 textPointers[i] = (Text.Length / TaskCount) * i;
 
+                while (textPointers[i] < Text.Length && !Char.IsWhiteSpace(Text[textPointers[i]]))
+                {
+                    ++textPointers[i];
+                }
                 if (textPointers[i] >= Text.Length)
                 {
                     textPointers[i] = Text.Length;
                     continue;
                 }
-                while (textPointers[i] < Text.Length && !Char.IsWhiteSpace(Text[textPointers[i]]))
-                {
-                    ++textPointers[i];
-                }
             }
             return textPointers;
         }
 
-        //test
 
-
-
-
-        private void Count(int start, int end)
+        private void CalculateWordsTextPart(int start, int end)
         {
             StringBuilder Word = new StringBuilder();
 
@@ -56,29 +51,29 @@ namespace DigitalDesign
             {
                 char symbol = Text[i];
 
-                if (Char.IsLetter(symbol))
+                if (Char.IsLetter(symbol) || Char.IsNumber(symbol))
                 {
                     Word.Append(char.ToLower(symbol));
                 }
-                else if ((symbol == '-') && Word.Length > 0)
+                else if ((symbol =='\'' || symbol == '-' || Char.IsNumber(symbol)) && Word.Length > 0)
                 {
                     Word.Append(symbol);
                 }
                 else if (Word.Length > 0)
                 {
-                    Map.AddOrUpdate(Word.ToString(), 1, (key, old) => old + 1);
+                    map.AddOrUpdate(Word.ToString(), 1, (key, old) => old + 1);
                     Word.Clear();
                 }
             }
             if (Word.Length > 0)
             {
-                Map.AddOrUpdate(Word.ToString(), 1, (key, old) => old + 1);
+                map.AddOrUpdate(Word.ToString(), 1, (key, old) => old + 1);
                 Word.Clear();
             }
         }
 
 
-        public void GetWords() 
+        public void CalculateWordsFullText() 
         {
             Task[] tasks = new Task[TaskCount];
             int[] textPointers = GetTextPointers();
@@ -88,11 +83,9 @@ namespace DigitalDesign
                 int start = i;
                 int end = i + 1;
 
-                tasks[i] = Task.Run(() => Count(textPointers[start], textPointers[end]));
+                tasks[i] = Task.Run(() => CalculateWordsTextPart(textPointers[start], textPointers[end]));
             }
             Task.WaitAll(tasks);
         }
-
-
     }
 }
