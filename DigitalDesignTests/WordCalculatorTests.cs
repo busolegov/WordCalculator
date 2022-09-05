@@ -29,7 +29,7 @@ namespace DigitalDesign.Tests
                     sb.Append(word);
                     sb.Append(wordSpaces[random.Next(0, 3)]);
                 }
-                actualMap.TryAdd(word, randomWordCount);
+                actualMap.Add(word, randomWordCount);
             }
 
             var orderedActualMap = actualMap.OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.Value);
