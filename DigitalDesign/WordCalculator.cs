@@ -8,15 +8,12 @@ namespace DigitalDesign
     {
         public int TaskCount { get; set; }
         public string Text { get; set; }
-
         public ConcurrentDictionary<string, int> map = new ConcurrentDictionary<string, int>();
-
         public WordCalculator(int cpuCount, string text)
         {
             TaskCount = cpuCount;
             Text = text;
         }
-
 
         private int[] GetTextPointers()
         {
@@ -41,7 +38,6 @@ namespace DigitalDesign
             }
             return textPointers;
         }
-
 
         private void CalculateWordsTextPart(int start, int end)
         {
@@ -71,7 +67,6 @@ namespace DigitalDesign
                 Word.Clear();
             }
         }
-
 
         public void CalculateWordsFullText() 
         {

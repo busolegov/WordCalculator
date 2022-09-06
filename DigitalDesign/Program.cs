@@ -7,25 +7,23 @@ class Program
     public static void Main(string[] args) 
     {
         Console.WriteLine("Введите путь к файлу.");
-
-        string text = null;
+        string? text = null;
 
         try
         {
-            text = File.ReadAllText(Console.ReadLine());
+            text = File.ReadAllText(Console.ReadLine(), Encoding.UTF8);
         }
-        catch (Exception)
+        catch (IOException ex)
         {
-            Console.WriteLine("Ошибка чтения файла. Нажмите Enter.");
+            Console.WriteLine(ex.Message);
+            Console.WriteLine("Нажмите Enter.");
             Console.ReadLine();
             Environment.Exit(0);
         }
 
         int cpuCount = Environment.ProcessorCount;
-
         WordCalculator calculator = new WordCalculator(cpuCount, text);
         calculator.CalculateWordsFullText();
-
         var result = calculator.map.OrderByDescending(pair => pair.Value).ToDictionary(pair => pair.Key, pair => pair.Value);
 
         try
@@ -38,15 +36,14 @@ class Program
                 }
             }
         }
-        catch (Exception)
+        catch (IOException ex)
         {
-            Console.WriteLine("Ошибка записи файла. Нажмите Enter.");
+            Console.WriteLine(ex.Message);
+            Console.WriteLine("Нажмите Enter.");
             Console.ReadLine();
             Environment.Exit(0);
         }
-        
         Console.WriteLine("Результат подсчета слов записан в файл result.txt");
-
         Console.ReadLine();
     }
 }
