@@ -13,7 +13,7 @@ class Program
         {
             text = File.ReadAllText(Console.ReadLine(), Encoding.UTF8);
         }
-        catch (IOException ex)
+        catch (Exception ex)
         {
             Console.WriteLine(ex.Message);
             Console.WriteLine("Нажмите Enter.");
@@ -28,11 +28,12 @@ class Program
 
         try
         {
-            using (StreamWriter sw = new StreamWriter("result.txt", false, Encoding.UTF8))
+            using (StreamWriter streamWriter = new StreamWriter("result.txt", false, Encoding.UTF8))
             {
                 foreach (var item in result)
                 {
-                    sw.WriteLine($"{item.Key} \t {item.Value}");
+
+                    streamWriter.WriteLine("{0,-30} {1,5}", item.Key, item.Value);
                 }
             }
         }

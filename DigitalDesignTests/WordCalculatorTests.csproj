@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DigitalDesign\DigitalDesign.csproj" />
+    <ProjectReference Include="..\DigitalDesign\WordCalculator.csproj" />
   </ItemGroup>
 
 </Project>
