@@ -18,7 +18,7 @@ namespace DigitalDesign.Tests
             StringBuilder sb = new StringBuilder();
             Dictionary<string, int> actualMap = new Dictionary<string, int>();
             Random random = new Random();
-            string[] wordSpaces = new string[4] {" ", "!", "  ", "??" };
+            string[] wordSpaces = new string[4] {" ", "\t", "  ", "?" };
 
             for (int i = 0; i <= cycle; i++)
             {
