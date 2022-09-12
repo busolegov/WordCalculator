@@ -18,9 +18,9 @@ namespace DigitalDesign.Tests
             StringBuilder sb = new StringBuilder();
             Dictionary<string, int> actualMap = new Dictionary<string, int>();
             Random random = new Random();
-            string[] wordSpaces = new string[4] {" ", "\t", "  ", "?" };
+            string[] wordSpaces = new string[4] {" ", "\n", "  ", "?" };
 
-            for (int i = 0; i <= cycle; i++)
+            for (int i = 1; i <= cycle; i++)
             {
                 int randomWordCount = random.Next(1, 10);
                 string word = fixture.Create<string>();
@@ -32,13 +32,11 @@ namespace DigitalDesign.Tests
                 actualMap.Add(word, randomWordCount);
             }
 
-            var orderedActualMap = actualMap.OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.Value);
-            int cpuCount = Environment.ProcessorCount;
-            WordCalculator calc = new WordCalculator(cpuCount, sb.ToString());
+            var orderedActualMap = actualMap.OrderByDescending(x => x.Key).ToDictionary(x => x.Key, x => x.Value);
+            WordCalculator calc = new WordCalculator(sb.ToString());
 
             //act
-            calc.CalculateWordsFullText();
-            var sut = calc.map.OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.Value);
+            var sut = calc.CalculateWordsFullText().OrderByDescending(x => x.Key).ToDictionary(x => x.Key, x => x.Value);
 
             //assert
             Assert.IsTrue(Enumerable.SequenceEqual(sut, orderedActualMap));

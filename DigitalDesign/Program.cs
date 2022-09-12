@@ -21,16 +21,14 @@ class Program
             Environment.Exit(0);
         }
 
-        int cpuCount = Environment.ProcessorCount;
-        WordCalculator calculator = new WordCalculator(cpuCount, text);
-        calculator.CalculateWordsFullText();
-        var result = calculator.map.OrderByDescending(pair => pair.Value).ToDictionary(pair => pair.Key, pair => pair.Value);
+        WordCalculator calculator = new WordCalculator(text);
+        var resultMap = calculator.CalculateWordsFullText();
 
         try
         {
             using (StreamWriter streamWriter = new StreamWriter("result.txt", false, Encoding.UTF8))
             {
-                foreach (var item in result)
+                foreach (var item in resultMap)
                 {
 
                     streamWriter.WriteLine("{0,-30} {1,5}", item.Key, item.Value);
